@@ -77,6 +77,18 @@ private:
 	// Picture Control에 영상을 그려주는 View 객체
 	CVideoView m_cameraView;
 
+	// ================================
+	// 현재 입력 영상 해상도 표시 Static Text
+	// ================================
+	CStatic m_staticResolutions;
+
+	// ================================
+	// 이전 해상도 문자열 저장
+	// ================================
+	CString m_prevResolutionText;
+
+	// ================================
+	// ================================
 	// 영상 수신 / 출력용 Thread
 	std::thread m_videoThread;
 
@@ -96,7 +108,7 @@ private:
 	cv::Scalar m_crossLineColor =
 		cv::Scalar(0, 255, 0, 255);
 
-	CFont m_fontUI; // [UI Control] 폰트 
+	CFont m_fontUI; // [UI Control] 폰트
 
 public:
 	// [RTSP] [Connect] 버튼 클릭 이벤트 함수

@@ -15,6 +15,8 @@
 #define IDC_STATIC_ID                   1008
 #define IDC_STATIC_RTSP_URL3            1009
 #define IDC_STATIC_PW                   1009
+#define IDC_STATIC_RESOLUTIONS          1010
+#define IDC_STATIC_RESOLUTION           1010
 
 // Next default values for new objects
 // 
@@ -22,7 +24,7 @@
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        130
 #define _APS_NEXT_COMMAND_VALUE         32771
-#define _APS_NEXT_CONTROL_VALUE         1008
+#define _APS_NEXT_CONTROL_VALUE         1011
 #define _APS_NEXT_SYMED_VALUE           101
 #endif
 #endif

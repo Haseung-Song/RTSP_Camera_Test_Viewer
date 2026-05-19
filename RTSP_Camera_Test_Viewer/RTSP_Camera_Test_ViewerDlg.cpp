@@ -30,6 +30,7 @@ void CRTSPCameraTestViewerDlg::DoDataExchange(CDataExchange* pDX)
 	CDialogEx::DoDataExchange(pDX);
 
 	DDX_Control(pDX, IDC_STATIC_CAMERA_VIEW, m_staticCameraView);
+	DDX_Control(pDX, IDC_STATIC_RESOLUTION, m_staticResolutions);
 
 	DDX_Control(pDX, IDC_EDIT_RTSP_URL, m_editsRtspUrl);
 	DDX_Control(pDX, IDC_EDIT_CAMERA_ID, m_editCameraId);
@@ -112,6 +113,9 @@ BOOL CRTSPCameraTestViewerDlg::OnInitDialog()
 
 	// [CheckBox] 폰트 적용
 	m_checkCrossLine.SetFont(&m_fontUI);
+
+	// [Static Text Control] 폰트 적용
+	m_staticResolutions.SetFont(&m_fontUI);
 
 	m_editsRtspUrl.SendMessage(
 		EM_SETMARGINS,
@@ -206,8 +210,8 @@ void CRTSPCameraTestViewerDlg::PlayRTSPVideo(std::string rtspUrl)
 	// 전달받은 RTSP 주소로 디코더 Open 시도
 	m_rtspDecoder.Open(rtspUrl);
 
-	// 연결 대기 // 최대 5초 대기 필요
-	for (int i = 0; i < 50; i++)
+	// 연결 대기 // 최대 7초 대기 필요
+	for (int i = 0; i < 70; i++)
 	{
 		// 디코더가 정상적으로 열렸으면 대기 종료
 		if (m_rtspDecoder.IsOpened())
@@ -253,7 +257,30 @@ void CRTSPCameraTestViewerDlg::PlayRTSPVideo(std::string rtspUrl)
 		if (m_rtspDecoder.IsOpened() &&
 			m_rtspDecoder.GetLatestFrame(frame))
 		{
-			// Picture Control에 프레임 출력
+			CString strResolutions;
+			// 포맷된 [해상도 문자열] 생성!
+			strResolutions.Format(
+				_T("Resolution : %d x %d"),
+				frame.bgr.cols,
+				frame.bgr.rows);
+
+			// 이전 해상도와 다를 때만 UI 갱신
+			if (m_prevResolutionText != strResolutions)
+			{
+				m_prevResolutionText = strResolutions;
+				// 영상 하단에 해상도 문자열 출력!
+				m_staticResolutions.SetWindowText(
+					m_prevResolutionText);
+
+				// 현재 입력 영상 해상도 로그 출력
+				std::cout << "[VIDEO RESOLUTION] "
+					<< frame.bgr.cols
+					<< " x "
+					<< frame.bgr.rows
+					<< std::endl;
+			}
+
+			// [Picture Control]에 프레임 출력
 			m_cameraView.DrawFrame(
 				frame.bgr,
 				m_showCrossLine,

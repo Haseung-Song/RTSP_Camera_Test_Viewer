@@ -150,6 +150,7 @@ void CRTSPDecoder::DecodeThreadProc()
 {
 	AVDictionary* options = nullptr;
 
+#if false
 	// RTSP는 TCP 방식으로 연결
 	av_dict_set(&options, "rtsp_transport", "tcp", 0);
 
@@ -161,6 +162,22 @@ void CRTSPDecoder::DecodeThreadProc()
 	// 연결 timeout: microseconds
 	av_dict_set(&options, "stimeout", "3000000", 0);
 	av_dict_set(&options, "rw_timeout", "3000000", 0);
+#endif
+
+	// RTSP 전송 방식 TCP 고정
+	av_dict_set(&options, "rtsp_transport", "tcp", 0);
+
+	// 저지연 옵션은 끊김 발생 가능성이 있어 일단 비활성화
+	// av_dict_set(&options, "fflags", "nobuffer", 0);
+	// av_dict_set(&options, "flags", "low_delay", 0);
+	// av_dict_set(&options, "max_delay", "0", 0);
+
+	// 연결 / 읽기 timeout: microseconds
+	av_dict_set(&options, "stimeout", "10000000", 0);
+	av_dict_set(&options, "rw_timeout", "10000000", 0);
+
+	// 수신 버퍼 증가
+	av_dict_set(&options, "buffer_size", "1048576", 0);
 
 	// Format Context 생성
 	m_fmtCtx = avformat_alloc_context();
